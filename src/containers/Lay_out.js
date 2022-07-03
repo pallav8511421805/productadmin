@@ -136,7 +136,7 @@ export default function Lay_out({ children }) {
         <Divider />
         <List>
           {product_list.map((text) => (
-            <ListItem key={text.label} to={text.to} exact component={NavLink} disablePadding sx={{ display: 'block' }}>
+            <ListItem key={text.label} style={{color:"rgba(0, 0, 0, 0.54)"}} to={text.to} exact component={NavLink} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,

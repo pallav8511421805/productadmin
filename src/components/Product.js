@@ -8,7 +8,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Form, Formik, useFormik } from 'formik';
 import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 
 
@@ -17,7 +18,30 @@ function Product(props) {
   const [open, setOpen] = React.useState(false);
   const [data, setdata] = useState([])
   const [data1, setdata1] = useState(0)
+  const [update,setupdate] = useState(false)
   const [dopen, setdOpen] = React.useState(false);
+
+  const handleproduct = (values)=>{
+
+    let local_data = JSON.parse(localStorage.getItem("Product"))
+    const productData = local_data.map((p)=>{
+           if(p.id === values.id){
+               return values;
+           }else{
+               return p;
+           }
+       })
+       localStorage.setItem("Patients", JSON.stringify(productData));
+       loadpdata()
+      formik.resetForm();
+      setupdate(false);
+}
+
+const editproduct = (params)=>{
+  handleClickOpen()
+  setupdate(true)
+  formik.setValues(params.row)
+}
 
   const handledClickOpen = () => {
     setdOpen(true);
@@ -60,9 +84,14 @@ function Product(props) {
     {
       field: 'action', headerName: 'Action', width: 130,
       renderCell: (params) => (
-        <IconButton aria-label="delete" color="primary" onClick={()=>{ handledClickOpen();setdata1(params.id) }} >
-          <DeleteIcon />
+        <>
+      <IconButton aria-label="delete" color="primary" onClick={()=>{ handledClickOpen();setdata1(params.id) }} >
+          <DeleteOutlineIcon/>
         </IconButton>
+        <IconButton aria-label="Edit" color="primary" onClick={editproduct(params)}>
+        <ModeEditOutlineOutlinedIcon/>
+      </IconButton>
+      </>
       )
     },
   ];
@@ -107,7 +136,11 @@ function Product(props) {
     },
     validationSchema: schema,
     onSubmit: values => {
+      if(update){
+        handleproduct(values);
+    } else{
       handleinsetdata(values);
+    }
     },
   });
 
@@ -149,6 +182,7 @@ function Product(props) {
             <Form onSubmit={handleSubmit}>
               <DialogContent>
                 <TextField
+                value={values.name}
                   margin="dense"
                   name="name"
                   label="Product name"
@@ -160,6 +194,7 @@ function Product(props) {
                 />
                 {errors.name && touched.name ? <p style={{ color: "red" }}>{errors.name}</p> : null}
                 <TextField
+                value={values.productid}
                   margin="dense"
                   name='productid'
                   label="Product unique id"
@@ -170,6 +205,7 @@ function Product(props) {
                 />
                 {errors.productid && touched.productid ? <p style={{ color: "red" }}>{errors.productid}</p> : null}
                 <TextField
+                value={values.price}
                   margin="dense"
                   name="price"
                   label="Price"
@@ -180,6 +216,7 @@ function Product(props) {
                 />
                 {errors.price && touched.price ? <p style={{ color: "red" }}>{errors.price}</p> : null}
                 <TextField
+                value={values.companyname}
                   margin="dense"
                   name="companyname"
                   label="Company name"
@@ -190,6 +227,7 @@ function Product(props) {
                 />
                 {errors.companyname && touched.companyname ? <p style={{ color: "red" }}>{errors.companyname}</p> : null}
                 <TextField
+                value={values.address}
                   margin="dense"
                   name="address"
                   label="Address"
@@ -202,7 +240,9 @@ function Product(props) {
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button type="submit">Submit</Button>
+                {
+                update ? <Button type='submit' onClick={handleClose}>Update</Button>:<Button type='submit'>Submit</Button>
+                }
               </DialogActions>
             </Form>
           </Formik>

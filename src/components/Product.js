@@ -10,14 +10,9 @@ import { Form, Formik, useFormik } from 'formik';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
-import Slide from '@mui/material/Slide';
 
 
 function Product(props) {
-
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
 
   const [open, setOpen] = React.useState(false);
   const [data, setdata] = useState([])
@@ -48,7 +43,7 @@ function Product(props) {
   const handleddelete = (params) => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
     
-    const filterdata = local_data.filter((l)=>l.id !== params.id);
+    const filterdata = local_data.filter((l)=>l.id !== data1);
     
     localStorage.setItem("Product", JSON.stringify(filterdata));
 
@@ -126,6 +121,24 @@ function Product(props) {
       <div>
         <h1>Products</h1>
       </div>
+      <>
+      <Dialog
+        open={dopen}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure to Delete?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>No</Button>
+          <Button onClick={handleddelete} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </>
       <div>
         <Button variant="outlined" onClick={handleClickOpen}>
           Add product details
@@ -195,19 +208,6 @@ function Product(props) {
           </Formik>
         </Dialog>
       </div>
-      <Dialog
-        open={dopen}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Are you sure to Delete?"}</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleClose}>No</Button>
-          <Button onClick={handleddelete}>Yes</Button>
-        </DialogActions>
-      </Dialog>
       <div style={{ height: 400, width: '80%', margin: "15px auto" }}>
         <DataGrid
           rows={data}

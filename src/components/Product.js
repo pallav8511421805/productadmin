@@ -21,28 +21,6 @@ function Product(props) {
   const [update, setupdate] = useState(false)
   const [dopen, setdOpen] = React.useState(false);
 
-  const handleproduct = (values) => {
-
-    let local_data = JSON.parse(localStorage.getItem("Product"))
-    const productData = local_data.map((p) => {
-      if (p.id === values.id) {
-        return values;
-      } else {
-        return p;
-      }
-    })
-    localStorage.setItem("Patients", JSON.stringify(productData));
-    loadpdata()
-    formik.resetForm();
-    setupdate(false);
-  }
-
-  const editproduct = (params) => {
-    handleClickOpen()
-    setupdate(true)
-    formik.setValues(params.row)
-  }
-
   const handledClickOpen = () => {
     setdOpen(true);
   };
@@ -53,6 +31,7 @@ function Product(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setdOpen(false);
   };
   const loadpdata = () => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
@@ -86,13 +65,37 @@ function Product(props) {
           <IconButton aria-label="delete" color="primary" onClick={() => { handledClickOpen(); setdata1(params.id) }} >
             <DeleteOutlineIcon />
           </IconButton>
-          <IconButton aria-label="Edit" color="primary" onClick={editproduct(params)}>
+          <IconButton aria-label="Edit" color="primary" onClick={()=>{editproduct(params)}}>
             <ModeEditOutlineOutlinedIcon />
           </IconButton>
         </>
       )
     },
   ];
+
+  const editproduct=(params)=>{
+    handleClickOpen();
+    
+    setupdate(true);
+
+    formik.setValues(params.row)
+   }
+
+  const handleproduct = (values) =>{
+    let local_data = JSON.parse(localStorage.getItem("Product"))
+     let product = local_data.map((p)=>{
+            if(p.id === values.id){
+                return values;
+            }else{
+                return p;
+            }
+        })
+        localStorage.setItem("Product", JSON.stringify(product));
+       loadpdata();
+       formik.resetForm();
+       handleClose();
+       setupdate(false); 
+  }
 
   const handleinsetdata = (values) => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
@@ -134,11 +137,11 @@ function Product(props) {
     },
     validationSchema: schema,
     onSubmit: values => {
-      if (update) {
-        handleproduct(values);
-      } else {
-        handleinsetdata(values);
-      }
+      if(update){
+    handleproduct(values);
+    }else{
+    handleinsetdata(values);
+    }
     },
   });
 
@@ -239,7 +242,7 @@ function Product(props) {
               <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
                 {
-                  update ? <Button type='submit' onClick={handleClose}>Update</Button> : <Button type='submit'>Submit</Button>
+                  update? <Button type='submit'>Update</Button>:<Button type='submit'>Submit</Button>
                 }
               </DialogActions>
             </Form>

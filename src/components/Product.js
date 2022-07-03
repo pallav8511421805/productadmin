@@ -18,30 +18,30 @@ function Product(props) {
   const [open, setOpen] = React.useState(false);
   const [data, setdata] = useState([])
   const [data1, setdata1] = useState(0)
-  const [update,setupdate] = useState(false)
+  const [update, setupdate] = useState(false)
   const [dopen, setdOpen] = React.useState(false);
 
-  const handleproduct = (values)=>{
+  const handleproduct = (values) => {
 
     let local_data = JSON.parse(localStorage.getItem("Product"))
-    const productData = local_data.map((p)=>{
-           if(p.id === values.id){
-               return values;
-           }else{
-               return p;
-           }
-       })
-       localStorage.setItem("Patients", JSON.stringify(productData));
-       loadpdata()
-      formik.resetForm();
-      setupdate(false);
-}
+    const productData = local_data.map((p) => {
+      if (p.id === values.id) {
+        return values;
+      } else {
+        return p;
+      }
+    })
+    localStorage.setItem("Patients", JSON.stringify(productData));
+    loadpdata()
+    formik.resetForm();
+    setupdate(false);
+  }
 
-const editproduct = (params)=>{
-  handleClickOpen()
-  setupdate(true)
-  formik.setValues(params.row)
-}
+  const editproduct = (params) => {
+    handleClickOpen()
+    setupdate(true)
+    formik.setValues(params.row)
+  }
 
   const handledClickOpen = () => {
     setdOpen(true);
@@ -53,9 +53,7 @@ const editproduct = (params)=>{
 
   const handleClose = () => {
     setOpen(false);
-    setdOpen(false);
   };
-
   const loadpdata = () => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
 
@@ -66,9 +64,9 @@ const editproduct = (params)=>{
 
   const handleddelete = (params) => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
-    
-    const filterdata = local_data.filter((l)=>l.id !== data1);
-    
+
+    const filterdata = local_data.filter((l) => l.id !== data1);
+
     localStorage.setItem("Product", JSON.stringify(filterdata));
 
     loadpdata();
@@ -85,13 +83,13 @@ const editproduct = (params)=>{
       field: 'action', headerName: 'Action', width: 130,
       renderCell: (params) => (
         <>
-      <IconButton aria-label="delete" color="primary" onClick={()=>{ handledClickOpen();setdata1(params.id) }} >
-          <DeleteOutlineIcon/>
-        </IconButton>
-        <IconButton aria-label="Edit" color="primary" onClick={editproduct(params)}>
-        <ModeEditOutlineOutlinedIcon/>
-      </IconButton>
-      </>
+          <IconButton aria-label="delete" color="primary" onClick={() => { handledClickOpen(); setdata1(params.id) }} >
+            <DeleteOutlineIcon />
+          </IconButton>
+          <IconButton aria-label="Edit" color="primary" onClick={editproduct(params)}>
+            <ModeEditOutlineOutlinedIcon />
+          </IconButton>
+        </>
       )
     },
   ];
@@ -136,11 +134,11 @@ const editproduct = (params)=>{
     },
     validationSchema: schema,
     onSubmit: values => {
-      if(update){
+      if (update) {
         handleproduct(values);
-    } else{
-      handleinsetdata(values);
-    }
+      } else {
+        handleinsetdata(values);
+      }
     },
   });
 
@@ -155,22 +153,22 @@ const editproduct = (params)=>{
         <h1>Products</h1>
       </div>
       <>
-      <Dialog
-        open={dopen}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure to Delete?"}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handleClose}>No</Button>
-          <Button onClick={handleddelete} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog
+          open={dopen}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Are you sure to Delete?"}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose}>No</Button>
+            <Button onClick={handleddelete} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
       </>
       <div>
         <Button variant="outlined" onClick={handleClickOpen}>
@@ -182,7 +180,7 @@ const editproduct = (params)=>{
             <Form onSubmit={handleSubmit}>
               <DialogContent>
                 <TextField
-                value={values.name}
+                  value={values.name}
                   margin="dense"
                   name="name"
                   label="Product name"
@@ -194,7 +192,7 @@ const editproduct = (params)=>{
                 />
                 {errors.name && touched.name ? <p style={{ color: "red" }}>{errors.name}</p> : null}
                 <TextField
-                value={values.productid}
+                  value={values.productid}
                   margin="dense"
                   name='productid'
                   label="Product unique id"
@@ -205,7 +203,7 @@ const editproduct = (params)=>{
                 />
                 {errors.productid && touched.productid ? <p style={{ color: "red" }}>{errors.productid}</p> : null}
                 <TextField
-                value={values.price}
+                  value={values.price}
                   margin="dense"
                   name="price"
                   label="Price"
@@ -216,7 +214,7 @@ const editproduct = (params)=>{
                 />
                 {errors.price && touched.price ? <p style={{ color: "red" }}>{errors.price}</p> : null}
                 <TextField
-                value={values.companyname}
+                  value={values.companyname}
                   margin="dense"
                   name="companyname"
                   label="Company name"
@@ -227,7 +225,7 @@ const editproduct = (params)=>{
                 />
                 {errors.companyname && touched.companyname ? <p style={{ color: "red" }}>{errors.companyname}</p> : null}
                 <TextField
-                value={values.address}
+                  value={values.address}
                   margin="dense"
                   name="address"
                   label="Address"
@@ -241,7 +239,7 @@ const editproduct = (params)=>{
               <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
                 {
-                update ? <Button type='submit' onClick={handleClose}>Update</Button>:<Button type='submit'>Submit</Button>
+                  update ? <Button type='submit' onClick={handleClose}>Update</Button> : <Button type='submit'>Submit</Button>
                 }
               </DialogActions>
             </Form>

@@ -10,21 +10,23 @@ import { Form, Formik, useFormik } from 'formik';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
+import Slide from '@mui/material/Slide';
+
 
 function Product(props) {
+
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
   const [open, setOpen] = React.useState(false);
   const [data, setdata] = useState([])
-  const [did, setdid] = useEffect(0)
+  const [data1, setdata1] = useState(0)
   const [dopen, setdOpen] = React.useState(false);
 
   const handledClickOpen = () => {
     setdOpen(true);
   };
-
-  const handledClose = () => {
-    setdOpen(false);
-  };
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,6 +34,7 @@ function Product(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setdOpen(false);
   };
 
   const loadpdata = () => {
@@ -42,14 +45,15 @@ function Product(props) {
     }
   }
 
-  const handleddelete = () => {
+  const handleddelete = (params) => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
-
-    let filterdata = local_data.filter((l) => l.id !== did);
-
+    
+    const filterdata = local_data.filter((l)=>l.id !== params.id);
+    
     localStorage.setItem("Product", JSON.stringify(filterdata));
+
     loadpdata();
-    handledClose();
+    handleClose();
   }
 
   const columns = [
@@ -61,13 +65,13 @@ function Product(props) {
     {
       field: 'action', headerName: 'Action', width: 130,
       renderCell: (params) => (
-        <IconButton aria-label="delete" color="primary" onClick={()=>{ handledClickOpen(), setdid(params.id) }}>
+        <IconButton aria-label="delete" color="primary" onClick={()=>{ handledClickOpen();setdata1(params.id) }} >
           <DeleteIcon />
         </IconButton>
       )
     },
   ];
-  {console.log(did)}
+
   const handleinsetdata = (values) => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
 
@@ -122,22 +126,6 @@ function Product(props) {
       <div>
         <h1>Products</h1>
       </div>
-      <Dialog
-        open={dopen}
-        onClose={handledClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure to delete?"}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handledClose}>No</Button>
-          <Button onClick={handleddelete} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
       <div>
         <Button variant="outlined" onClick={handleClickOpen}>
           Add product details
@@ -207,6 +195,19 @@ function Product(props) {
           </Formik>
         </Dialog>
       </div>
+      <Dialog
+        open={dopen}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Are you sure to Delete?"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>No</Button>
+          <Button onClick={handleddelete}>Yes</Button>
+        </DialogActions>
+      </Dialog>
       <div style={{ height: 400, width: '80%', margin: "15px auto" }}>
         <DataGrid
           rows={data}

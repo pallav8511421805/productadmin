@@ -14,7 +14,7 @@ import { DataGrid } from '@mui/x-data-grid';
 function Product(props) {
   const [open, setOpen] = React.useState(false);
   const [data, setdata] = useState([])
-  const [did,setdid] = useEffect (0)
+  const [did, setdid] = useEffect(0)
   const [dopen, setdOpen] = React.useState(false);
 
   const handledClickOpen = () => {
@@ -42,6 +42,16 @@ function Product(props) {
     }
   }
 
+  const handleddelete = () => {
+    let local_data = JSON.parse(localStorage.getItem("Product"))
+
+    let filterdata = local_data.filter((l) => l.id !== did);
+
+    localStorage.setItem("Product", JSON.stringify(filterdata));
+    loadpdata();
+    handledClose();
+  }
+
   const columns = [
     { field: 'name', headerName: 'Product name', width: 130 },
     { field: 'productid', headerName: 'Product id', width: 130 },
@@ -51,12 +61,13 @@ function Product(props) {
     {
       field: 'action', headerName: 'Action', width: 130,
       renderCell: (params) => (
-        <IconButton aria-label="delete" color="primary" onClick={()=>{handledClickOpen()}}>
-          <DeleteIcon/>
+        <IconButton aria-label="delete" color="primary" onClick={()=>{ handledClickOpen(), setdid(params.id) }}>
+          <DeleteIcon />
         </IconButton>
       )
     },
   ];
+  {console.log(did)}
   const handleinsetdata = (values) => {
     let local_data = JSON.parse(localStorage.getItem("Product"))
 
@@ -78,10 +89,6 @@ function Product(props) {
     formik.resetForm()
     loadpdata()
   }
-  const handleddelete = () =>{
-    
-  }
-
 
   let schema = yup.object().shape({
     name: yup.string().required("Please enter your product name."),
@@ -122,7 +129,7 @@ function Product(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+          {"Are you sure to delete?"}
         </DialogTitle>
         <DialogActions>
           <Button onClick={handledClose}>No</Button>

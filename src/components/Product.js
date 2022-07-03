@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useFormik } from 'formik';
+import { useFormik,Formik,Form } from 'formik';
 import * as yup from 'yup'; 
 
 function Product(props) {
@@ -19,23 +19,43 @@ function Product(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleinsetdata = (values) =>{
+    let local_data = JSON.parse(localStorage.getItem("Product"))
+    
+    if(local_data === null){
+        localStorage.setItem("Product",JSON.stringify([values]))
+    } else {
+        local_data.push(values);
+        localStorage.setItem("Product",JSON.stringify(local_data))
+    }
+    handleClose()
+  }
+
+
   let schema = yup.object().shape({ 
-    name:yup.string().required("Please enter your medicine name."), 
-    quantity:yup.number().positive().integer().required("Please enter your medicine quantity."), 
-    price:yup.number().positive().integer().required("Please enter your medicine price."), 
-    expiry:yup.number().positive().integer().required("Please enter your medicine expiry year.") 
+    name:yup.string().required("Please enter your product name."), 
+    productid:yup.string().required("Please enter your product id."), 
+    price:yup.number().positive("Please enter your product valid price.").integer().required("Please enter your product price."), 
+    companyname:yup.string().required("Please enter your company name."),
+    address:yup.string().required("Please enter your address."), 
     }); 
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
+        name: '',
+        productid: '',
+        price: '',
+        companyname: '',
+        address: ''
     },
+    validationSchema:schema,
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      handleinsetdata(values);
     },
   });
+
+  let {errors,values,touched,handleBlur,handleChange,handleSubmit} = formik;
     return (
         <>
         <div>
@@ -47,6 +67,8 @@ function Product(props) {
         </Button>
         <Dialog fullWidth open={open} onClose={handleClose}>
           <DialogTitle>Add product</DialogTitle>
+          <Formik value={formik}>
+          <Form onSubmit={handleSubmit}>
           <DialogContent>
             <TextField
               margin="dense"
@@ -55,40 +77,57 @@ function Product(props) {
               type="text"
               fullWidth
               variant="standard"
+              onBlur={handleBlur}
+              onChange={handleChange}
             />
+            {errors.name && touched.name ?<p style={{color:"red"}}>{errors.name}</p>:null}
             <TextField
               margin="dense"
               name='productid'
               label="Product unique id"
               fullWidth
               variant="standard"
+              onBlur={handleBlur}
+              onChange={handleChange}
             />
+            {errors.productid && touched.productid ?<p style={{color:"red"}}>{errors.productid}</p>:null}
             <TextField
               margin="dense"
               name="price"
               label="Price"
               fullWidth
               variant="standard"
+              onBlur={handleBlur}
+              onChange={handleChange}
             />
+            {errors.price && touched.price ?<p style={{color:"red"}}>{errors.price}</p>:null}
             <TextField
               margin="dense"
               name="companyname"
               label="Company name"
               fullWidth
               variant="standard"
+              onBlur={handleBlur}
+              onChange={handleChange}
             />
+            {errors.companyname && touched.companyname ?<p style={{color:"red"}}>{errors.companyname}</p>:null}
             <TextField
               margin="dense"
               name="address"
               label="Address"
               fullWidth
               variant="standard"
+              onBlur={handleBlur}
+              onChange={handleChange}
             />
+            {errors.address && touched.address ?<p style={{color:"red"}}>{errors.address}</p>:null}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type='submit'>Submit</Button>
+            <Button type="submit">Submit</Button>
           </DialogActions>
+          </Form>
+        </Formik>
         </Dialog>
       </div>
         </>

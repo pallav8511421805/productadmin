@@ -17,6 +17,7 @@ function Product(props) {
 
   const [open, setOpen] = React.useState(false);
   const [data, setdata] = useState([])
+  const [sproduct,setsproduct] = useState([])
   const [data1, setdata1] = useState(0)
   const [update, setupdate] = useState(false)
   const [dopen, setdOpen] = React.useState(false);
@@ -145,6 +146,21 @@ function Product(props) {
     },
   });
 
+  const handlesearchproduct = (productval) =>{
+    let local_data = JSON.parse(localStorage.getItem("Product"))
+
+    const filterproductdata = local_data.filter((fp)=>(
+      fp.name.toLowerCase().includes(productval) ||
+      fp.productid.toString().includes(productval) ||
+      fp.price.toString().includes(productval) ||
+      fp.companyname.toString().includes(productval) ||
+      fp.address.toString().includes(productval)
+    ))
+    setsproduct(filterproductdata)
+  }
+
+  const filter_product = sproduct.length > 0 ? sproduct : data;
+
   useEffect(() => {
     loadpdata()
   }, [])
@@ -177,6 +193,17 @@ function Product(props) {
         <Button variant="outlined" onClick={handleClickOpen}>
           Add product details
         </Button>
+        <div style={{textAlign:"center"}}>
+        <TextField style={{width:"80%"}}
+                  margin="dense"
+                  name="Search"
+                  label="Search Product data"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  onChange={(e)=>(handlesearchproduct(e.target.value))}
+                />
+        </div>
         <Dialog fullWidth open={open} onClose={handleClose}>
           <DialogTitle>Add product</DialogTitle>
           <Formik value={formik}>
@@ -251,7 +278,7 @@ function Product(props) {
       </div>
       <div style={{ height: 400, width: '80%', margin: "15px auto" }}>
         <DataGrid
-          rows={data}
+          rows={filter_product}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}

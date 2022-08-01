@@ -168,7 +168,7 @@ function Product(props) {
 
   useEffect(() => {
     // loadpdata()
-    Dispatch(getproduct_data)
+    Dispatch(getproduct_data())
   }, [])
 
   let { errors, values, touched, handleBlur, handleChange, handleSubmit } = formik;

@@ -20,7 +20,7 @@ export const getproduct_data = () => (dispatch) => {
                         throw errmess;
                     })
                 .then(response => response.json())
-                .then(data => dispatch(({ type: Actiontypes.getproductdata, payload: data.data })))
+                .then(data => dispatch(({ type: Actiontypes.getproductdata, payload:data})))
                 .catch(error => dispatch(errordata(error.message)));
         }, 2000)
     } catch (error) {

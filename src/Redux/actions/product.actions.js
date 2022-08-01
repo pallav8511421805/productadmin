@@ -1,11 +1,11 @@
-import { baseurl } from "../../Baseurl/baseurl";
+import { base_url } from '../../../BaseUrl/baseurl';
 import * as Actiontypes from '../actions/Actiontype';
 
-export const Getdata = () => (dispatch) => {
+export const getproduct_data = () => (dispatch) => {
     try {
         dispatch(loaddata())
         setTimeout(function () {
-            fetch(baseurl + 'product')
+            fetch(base_url + 'product')
                 .then(response => {
                     if (response.ok) {
                         return response;

@@ -3,7 +3,7 @@ import * as Actiontypes from '../actions/Actiontype';
 
 export const getproduct_data = () => (dispatch) => {
     try {
-        dispatch(loaddata())
+        // dispatch(loaddata())
         setTimeout(function () {
             fetch(base_url + 'product')
                 .then(response => {
@@ -21,17 +21,17 @@ export const getproduct_data = () => (dispatch) => {
                     })
                 .then(response => response.json())
                 .then(data => dispatch(({ type: Actiontypes.getproductdata, payload: data.data })))
-                .catch(error => dispatch(errordata(error.message)));
+                .catch(error => console.error('Error:', error));
         }, 2000)
     } catch (error) {
-        dispatch(errordata(error.message))
+        console.error('Error:', error);
     }
 }
 
-export const loaddata = () => (dispatch) => {
-    dispatch({ type: Actiontypes.Load_Product})
-}
+// export const loaddata = () => (dispatch) => {
+//     dispatch({ type: Actiontypes.Load_Product})
+// }
 
-export const errordata = (error) => (dispatch) => {
-    dispatch({ type: Actiontypes.Error_Product, payload: error })
-}
+// export const errordata = (error) => (dispatch) => {
+//     dispatch({ type: Actiontypes.Error_Product, payload: error })
+// }

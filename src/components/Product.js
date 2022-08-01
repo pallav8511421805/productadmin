@@ -12,6 +12,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
+import { getproduct_data } from '../Redux/actions/product.actions';
 
 
 function Product(props) {
@@ -167,7 +168,7 @@ function Product(props) {
 
   useEffect(() => {
     // loadpdata()
-    
+    Dispatch(getproduct_data)
   }, [])
 
   let { errors, values, touched, handleBlur, handleChange, handleSubmit } = formik;

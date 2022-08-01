@@ -15,19 +15,19 @@ export const productreducer = (state = intval, action) => {
                 error: ''
             }
 
-        case Actiontypes.Load_Product:
-            return {
-                ...state,
-                isload: true,
-                error: ''
-            }
-        case Actiontypes.Error_Product:
-            return {
-                ...state,
-                isload: false,
-                productdata: [],
-                error: action.payload
-            }
+        // case Actiontypes.Load_Product:
+        //     return {
+        //         ...state,
+        //         isload: true,
+        //         error: ''
+        //     }
+        // case Actiontypes.Error_Product:
+        //     return {
+        //         ...state,
+        //         isload: false,
+        //         productdata: [],
+        //         error: action.payload
+        //     }
         default:
             return state;
     }

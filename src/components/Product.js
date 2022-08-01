@@ -12,7 +12,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
-import { Adddata, Editdata, getproduct_data } from '../Redux/actions/product.actions';
+import { Adddata, Deletedata, Editdata, getproduct_data } from '../Redux/actions/product.actions';
 
 
 function Product(props) {
@@ -48,11 +48,13 @@ function Product(props) {
   }
 
   const handleddelete = (params) => {
-    let local_data = JSON.parse(localStorage.getItem("Product"))
+    // let local_data = JSON.parse(localStorage.getItem("Product"))
 
-    const filterdata = local_data.filter((l) => l.id !== data1);
+    // const filterdata = local_data.filter((l) => l.id !== data1);
 
-    localStorage.setItem("Product", JSON.stringify(filterdata));
+    // localStorage.setItem("Product", JSON.stringify(filterdata));
+
+    Dispatch(Deletedata(data1))
 
     loadpdata();
     handleClose();
@@ -98,7 +100,7 @@ function Product(props) {
     // })
     // localStorage.setItem("Product", JSON.stringify(product));
     Dispatch(Editdata(values))
-    
+
     loadpdata();
     formik.resetForm();
     handleClose();

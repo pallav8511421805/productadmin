@@ -2,15 +2,7 @@
   "product": [
     {
       "id": 50,
-      "name": "mobile",
-      "productid": "3411",
-      "price": "2500",
-      "companyname": "bbdgbcg",
-      "address": "jsdvxnvvxc vcvvgddbgc"
-    },
-    {
-      "id": 52,
-      "name": "laptop",
+      "name": "mobile_1",
       "productid": "3411",
       "price": "2500",
       "companyname": "bbdgbcg",

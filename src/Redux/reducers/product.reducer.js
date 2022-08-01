@@ -15,6 +15,35 @@ export const productreducer = (state = intval, action) => {
                 error: ''
             }
 
+            case Actiontypes.Add_product:
+            return {
+                ...state,
+                isload: false,
+                patientdata: state.patientdata.concat(action.payload),
+                error: ''
+            }
+
+            case Actiontypes.Edit_product:
+                return {
+                    ...state,
+                    isload: false,
+                    patientdata: state.patientdata.map((p) => {
+                        if (p.id === action.payload.id) {
+                            return action.payload;
+                        } else {
+                            return p;
+                        }
+                    }),
+                    error: ''
+                }
+                case Actiontypes.Delete_product:
+                return {
+                    ...state,
+                    isload: false,
+                    patientdata: state.patientdata.filter((d) => d.id !== action.payload.id),
+                    error: ''
+                }
+
         case Actiontypes.Load_Product:
             return {
                 ...state,

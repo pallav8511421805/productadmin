@@ -17,10 +17,13 @@ export const getdata = (path) => {
     })
 }
 
-export const adddata = (data, path) => {
+export const adddata = (path,data) => {
     return sendrequest({
         url: path,
         data: JSON.stringify(data),
-        method: 'GET',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+          },
     })
 }

@@ -11,9 +11,13 @@ import IconButton from '@mui/material/IconButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import { DataGrid } from '@mui/x-data-grid';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 function Product(props) {
+
+  const Dispatch = useDispatch()
+  const getdata_product = useSelector(state => state.product) 
 
   const [open, setOpen] = React.useState(false);
   const [data, setdata] = useState([])
@@ -162,7 +166,8 @@ function Product(props) {
   const filter_product = sproduct.length > 0 ? sproduct : data;
 
   useEffect(() => {
-    loadpdata()
+    // loadpdata()
+    
   }, [])
 
   let { errors, values, touched, handleBlur, handleChange, handleSubmit } = formik;
@@ -278,7 +283,7 @@ function Product(props) {
       </div>
       <div style={{ height: 400, width: '80%', margin: "15px auto" }}>
         <DataGrid
-          rows={filter_product}
+          rows={getdata_product.productdata}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}

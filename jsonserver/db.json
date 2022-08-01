@@ -1,9 +1,30 @@
 {
-    "posts": [
-      { "id": 1, "title": "json-server", "author": "typicode" }
-    ],
-    "comments": [
-      { "id": 1, "body": "some comment", "postId": 1 }
-    ],
-    "profile": { "name": "typicode" }
+  "product": [
+    {
+      "id": 50,
+      "name": "mobile",
+      "productid": "3411",
+      "price": "2500",
+      "companyname": "bbdgbcg",
+      "address": "jsdvxnvvxc vcvvgddbgc"
+    },
+    {
+      "id": 52,
+      "name": "laptop",
+      "productid": "3411",
+      "price": "2500",
+      "companyname": "bbdgbcg",
+      "address": "jsdvxnvvxc vcvvgddbgc"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
   }
+}

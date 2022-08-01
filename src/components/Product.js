@@ -175,9 +175,9 @@ function Product(props) {
   return (
     <>
       {
-        getdata_product.isload ? <div style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ fontSize: 24, textAlign: "center", color: '#1976d2' }}>LOADING...</div>
-        </div> :
+        getdata_product.isload ? 
+          <div style={{ fontSize: 24, color: '#1976d2' }}>Loading...</div>
+        :
           getdata_product.error != '' ?
             <div style={{ fontSize: 24 }}>{getdata_product.error}</div> :
 

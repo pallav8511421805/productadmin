@@ -1,4 +1,4 @@
-import { base_url } from '../../../BaseUrl/baseurl';
+import { base_url } from '../../BaseUrl/baseurl';
 import * as Actiontypes from '../actions/Actiontype';
 
 export const getproduct_data = () => (dispatch) => {

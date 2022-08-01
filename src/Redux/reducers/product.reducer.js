@@ -25,11 +25,10 @@ export const productreducer = (state = intval, action) => {
             return {
                 ...state,
                 isload: false,
-                patientdata: [],
+                productdata: [],
                 error: action.payload
             }
         default:
             return state;
     }
-}
 }

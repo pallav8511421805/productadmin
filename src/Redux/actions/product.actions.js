@@ -1,4 +1,4 @@
-import { getalldata } from '../../Axios/APIS/Product.api';
+import { Addalldata, getalldata } from '../../Axios/APIS/Product.api';
 import { base_url } from '../../BaseUrl/baseurl';
 import * as Actiontypes from '../actions/Actiontype';
 
@@ -39,30 +39,33 @@ export const Adddata = (data) => (dispatch) => {
     try {
         dispatch(loaddata())
         setTimeout(function () {
-            fetch(base_url + 'product')
-                .then(response => {
-                    if (response.ok) {
-                        return response;
-                    } else {
-                        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                        error.response = response;
-                        throw error;
-                    }
-                },
-                    error => {
-                        var errmess = new Error(error.message);
-                        throw errmess;
-                    })
-            fetch(base_url + 'product', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-                .then(response => response.json())
-                .then(data => dispatch(({ type: Actiontypes.Add_product, payload: data })))
+            Addalldata(data)
+                .then(data => dispatch(({ type: Actiontypes.Add_product, payload: data.data })))
                 .catch(error => dispatch(errordata(error.message)));
+            // fetch(base_url + 'product')
+            //     .then(response => {
+            //         if (response.ok) {
+            //             return response;
+            //         } else {
+            //             var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            //             error.response = response;
+            //             throw error;
+            //         }
+            //     },
+            //         error => {
+            //             var errmess = new Error(error.message);
+            //             throw errmess;
+            //         })
+            // fetch(base_url + 'product', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(data),
+            // })
+            //     .then(response => response.json())
+            //     .then(data => dispatch(({ type: Actiontypes.Add_product, payload: data.data})))
+            //     .catch(error => dispatch(errordata(error.message)));
         }, 2000)
     } catch (error) {
         dispatch(errordata(error.message))

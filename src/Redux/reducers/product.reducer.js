@@ -19,7 +19,7 @@ export const productreducer = (state = intval, action) => {
             return {
                 ...state,
                 isload: false,
-                patientdata: state.patientdata.concat(action.payload),
+                productdata: state.productdata.concat(action.payload),
                 error: ''
             }
 
@@ -27,7 +27,7 @@ export const productreducer = (state = intval, action) => {
                 return {
                     ...state,
                     isload: false,
-                    patientdata: state.patientdata.map((p) => {
+                    productdata: state.productdata.map((p) => {
                         if (p.id === action.payload.id) {
                             return action.payload;
                         } else {
@@ -40,7 +40,7 @@ export const productreducer = (state = intval, action) => {
                 return {
                     ...state,
                     isload: false,
-                    patientdata: state.patientdata.filter((d) => d.id !== action.payload.id),
+                    productdata: state.productdata.filter((d) => d.id !== action.payload.id),
                     error: ''
                 }
 

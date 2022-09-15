@@ -1,9 +1,9 @@
 import { Addalldata, Deletealldata, editalldata, getalldata } from '../../Axios/APIS/Product.api'
 import { base_url } from '../../BaseUrl/baseurl'
 import { db, storage } from '../../Firebase'
-import { addDoc, collection,getDocs} from 'firebase/firestore'
+import { addDoc, collection,deleteDoc,doc,getDocs} from 'firebase/firestore'
 import * as Actiontypes from '../actions/Actiontype'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 export const getproduct_data = () => (dispatch) => {
   try {
@@ -99,13 +99,46 @@ export const Adddata = (data) => (dispatch) => {
   }
 }
 
-export const Editdata = (data) => (dispatch) => {
+export const Editdata = (data) => async (dispatch) => {
   try {
-    editalldata(data)
-     .then((data) =>
-        dispatch({ type: Actiontypes.Edit_product, payload: data }),
-      )
-      .catch((error) => dispatch(errordata(error.message)))
+    const medRef = db.collection('Medicines').doc(data.id)
+    if(typeof data.pname === 'string'){
+      const res = await medRef.update({
+        name: data.name,
+        quantity: data.quantity,
+        price: data.price,
+        expiry: data.expiry,
+        filename: data.filename,
+        pname: data.pname,
+      })
+      dispatch({ type: Actiontypes.Edit_product, payload: data })
+    } else{
+      const filename1 = Math.floor(Math.random()*100000);
+      const oldimgref = ref(storage, 'Medicines/' + data.filename)
+      const newimgref = ref(storage, 'Medicines/' + filename1)
+      deleteObject(oldimgref)
+    .then(async() => {
+      uploadBytes(newimgref,data.pname).then(async (snapshot) => {
+        getDownloadURL(snapshot.ref)
+        .then(
+          async (url) => {
+            dispatch({
+              type: Actiontypes.Edit_product,
+              payload: { ...data,pname: url,filename:filename1}
+            })
+          },
+        )
+      })
+    })
+    .catch((error) => {
+      dispatch(errordata(error.message))
+    });
+    }
+    // editalldata(data)
+    //  .then((data) =>
+    //     dispatch({ type: Actiontypes.Edit_product, payload: data }),
+    //   )
+    //   .catch((error) => dispatch(errordata(error.message)))
     // fetch(base_url + 'product/').then(
     //   (response) => {
     //     if (response.ok) {
@@ -140,11 +173,20 @@ export const Editdata = (data) => (dispatch) => {
   }
 }
 
-export const Deletedata = (id) => (dispatch) => {
+export const Deletedata = (data) => (dispatch) => {
   try {
-    Deletealldata(id)
-      .then(dispatch({ type: Actiontypes.Delete_product, payload: id }))
-      .catch((error) => dispatch(errordata(error.message)))
+    const proRef = ref(storage, 'Products/' + data.filename)
+    deleteObject(proRef)
+    .then(async() => {
+      await deleteDoc(doc(db, 'Products', data.id))
+      dispatch({ type: Actiontypes.Delete_product, payload: data.id })
+    })
+    .catch((error) => {
+      dispatch(errordata(error.message))
+    });
+    // Deletealldata(id)
+    //   .then(dispatch({ type: Actiontypes.Delete_product, payload: id }))
+    //   .catch((error) => dispatch(errordata(error.message)))
     // fetch(base_url + 'product').then(
     //   (response) => {
     //     if (response.ok) {

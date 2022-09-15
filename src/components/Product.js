@@ -66,11 +66,17 @@ function Product(props) {
     { field: 'price', headerName: 'Price', width: 130 },
     { field: 'companyname', headerName: 'Company name', width: 130 },
     { field: 'address', headerName: 'Address', width: 130 },
+    { field: 'pname', headerName: 'Image', width: 130,
+    renderCell:(params)=>(
+<>
+          <img src={params.row.pname} width={50} height={50}/>
+        </>
+    ) },
     {
       field: 'action', headerName: 'Action', width: 130,
       renderCell: (params) => (
         <>
-          <IconButton aria-label="delete" color="primary" onClick={() => { handledClickOpen(); setdata1(params.id) }} >
+          <IconButton aria-label="delete" color="primary" onClick={() => { handledClickOpen(); setdata1(params.row) }} >
             <DeleteOutlineIcon />
           </IconButton>
           <IconButton aria-label="Edit" color="primary" onClick={() => { editproduct(params) }}>
@@ -137,6 +143,7 @@ function Product(props) {
     price: yup.number().positive("Please enter your product valid price.").integer().required("Please enter your product price."),
     companyname: yup.string().required("Please enter your company name."),
     address: yup.string().required("Please enter your address."),
+    pname: yup.mixed().required('Please select your image.'),
   });
 
   const formik = useFormik({
@@ -145,7 +152,8 @@ function Product(props) {
       productid: '',
       price: '',
       companyname: '',
-      address: ''
+      address: '',
+      pname: '',
     },
     validationSchema: schema,
     onSubmit: values => {
@@ -177,7 +185,7 @@ function Product(props) {
     Dispatch(getproduct_data())
   }, [])
 
-  let { errors, values, touched, handleBlur, handleChange, handleSubmit } = formik;
+  let { errors, values, touched, handleBlur, handleChange, handleSubmit,setFieldValue } = formik;
   return (
     <>
       {
@@ -285,6 +293,17 @@ function Product(props) {
                           onChange={handleChange}
                         />
                         {errors.address && touched.address ? <p style={{ color: "red" }}>{errors.address}</p> : null}
+                        <>
+                      <p>Profile image</p>
+                      <input
+                        type={'file'}
+                        name="pname"
+                        onChange={(e) => {
+                          setFieldValue('pname', e.target.files[0])
+                        }}
+                      />
+                      {errors.pname && touched.pname ? <p style={{ color: "red" }}>{errors.pname}</p> : null}
+                    </>
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>

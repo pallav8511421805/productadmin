@@ -68,7 +68,7 @@ function Product(props) {
     { field: 'address', headerName: 'Address', width: 130 },
     { field: 'pname', headerName: 'Image', width: 130,
     renderCell:(params)=>(
-<>
+        <>
           <img src={params.row.pname} width={50} height={50}/>
         </>
     ) },

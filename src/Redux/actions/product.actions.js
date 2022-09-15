@@ -1,4 +1,4 @@
-import { Addalldata, getalldata } from '../../Axios/APIS/Product.api'
+import { Addalldata, Deletealldata, getalldata } from '../../Axios/APIS/Product.api'
 import { base_url } from '../../BaseUrl/baseurl'
 import * as Actiontypes from '../actions/Actiontype'
 
@@ -113,30 +113,33 @@ export const Editdata = (data) => (dispatch) => {
 
 export const Deletedata = (id) => (dispatch) => {
   try {
-    fetch(base_url + 'product').then(
-      (response) => {
-        if (response.ok) {
-          return response
-        } else {
-          var error = new Error(
-            'Error ' + response.status + ': ' + response.statusText,
-          )
-          error.response = response
-          throw error
-        }
-      },
-      (error) => {
-        var errmess = new Error(error.message)
-        throw errmess
-      },
-    )
-    fetch(base_url + 'product/' + id, {
-      method: 'DELETE',
-    })
-      .then((data) =>
-        dispatch({ type: Actiontypes.Delete_product, payload: data }),
-      )
+    Deletealldata(id)
+      .then(dispatch({ type: Actiontypes.Delete_product, payload: id }))
       .catch((error) => dispatch(errordata(error.message)))
+    // fetch(base_url + 'product').then(
+    //   (response) => {
+    //     if (response.ok) {
+    //       return response
+    //     } else {
+    //       var error = new Error(
+    //         'Error ' + response.status + ': ' + response.statusText,
+    //       )
+    //       error.response = response
+    //       throw error
+    //     }
+    //   },
+    //   (error) => {
+    //     var errmess = new Error(error.message)
+    //     throw errmess
+    //   },
+    // )
+    // fetch(base_url + 'product/' + id, {
+    //   method: 'DELETE',
+    // })
+    //   .then((data) =>
+    //     dispatch({ type: Actiontypes.Delete_product, payload: data }),
+    //   )
+    //   .catch((error) => dispatch(errordata(error.message)))
   } catch (error) {
     dispatch(errordata(error.message))
   }

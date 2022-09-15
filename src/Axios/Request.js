@@ -27,3 +27,23 @@ export const adddata = (path,data) => {
           },
     })
 }
+
+export const deletedata = (path,id) =>{
+    return sendrequest({
+        url: path + id,
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+          },
+    })
+}
+export const editdata = (path,data) =>{
+    return sendrequest({
+        url: path + data.id,
+        method: "PUT",
+        data:JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}

@@ -100,7 +100,6 @@ export const Adddata = (data) => (dispatch) => {
 }
 
 export const Editdata = (data) => async (dispatch) => {
-  console.log(data)
   try {
     const proRef = db.collection('Products').doc(data.id)
     if(typeof data.pname === 'string'){

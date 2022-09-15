@@ -1,4 +1,4 @@
-import { adddata, deletedata, getdata } from "../Request"
+import { adddata, deletedata, editdata, getdata } from "../Request"
 
 export const getalldata = () => {
     return getdata('product')
@@ -10,4 +10,7 @@ export const Addalldata = (data) => {
 
 export const Deletealldata = (id) =>{
     return deletedata('product',id)
+}
+export const editalldata = (data) =>{
+    return editdata('product',data.id)
 }

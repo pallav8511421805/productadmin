@@ -1,4 +1,4 @@
-import { Addalldata, Deletealldata, getalldata } from '../../Axios/APIS/Product.api'
+import { Addalldata, Deletealldata, editalldata, getalldata } from '../../Axios/APIS/Product.api'
 import { base_url } from '../../BaseUrl/baseurl'
 import * as Actiontypes from '../actions/Actiontype'
 
@@ -77,35 +77,40 @@ export const Adddata = (data) => (dispatch) => {
 
 export const Editdata = (data) => (dispatch) => {
   try {
-    fetch(base_url + 'product/').then(
-      (response) => {
-        if (response.ok) {
-          return response
-        } else {
-          var error = new Error(
-            'Error ' + response.status + ': ' + response.statusText,
-          )
-          error.response = response
-          throw error
-        }
-      },
-      (error) => {
-        var errmess = new Error(error.message)
-        throw errmess
-      },
-    )
-    fetch(base_url + 'product/' + data.id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) =>
+    editalldata(data)
+     .then((data) =>
         dispatch({ type: Actiontypes.Edit_product, payload: data }),
       )
       .catch((error) => dispatch(errordata(error.message)))
+    // fetch(base_url + 'product/').then(
+    //   (response) => {
+    //     if (response.ok) {
+    //       return response
+    //     } else {
+    //       var error = new Error(
+    //         'Error ' + response.status + ': ' + response.statusText,
+    //       )
+    //       error.response = response
+    //       throw error
+    //     }
+    //   },
+    //   (error) => {
+    //     var errmess = new Error(error.message)
+    //     throw errmess
+    //   },
+    // )
+    // fetch(base_url + 'product/' + data.id, {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) =>
+    //     dispatch({ type: Actiontypes.Edit_product, payload: data }),
+    //   )
+    //   .catch((error) => dispatch(errordata(error.message)))
   } catch (error) {
     dispatch(errordata(error.message))
   }

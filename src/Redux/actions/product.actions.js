@@ -1,16 +1,25 @@
 import { Addalldata, Deletealldata, editalldata, getalldata } from '../../Axios/APIS/Product.api'
 import { base_url } from '../../BaseUrl/baseurl'
+import { db, storage } from '../../Firebase'
+import { addDoc, collection,getDocs} from 'firebase/firestore'
 import * as Actiontypes from '../actions/Actiontype'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 export const getproduct_data = () => (dispatch) => {
   try {
     dispatch(loaddata())
-    setTimeout(function () {
-      getalldata()
-        .then((data) =>
-          dispatch({ type: Actiontypes.getproductdata, payload: data.data }),
-        )
-        .catch((error) => dispatch(errordata(error.message)))
+    setTimeout(async function () {
+      let data = []
+      const querySnapshot = await getDocs(collection(db, 'Products'))
+      querySnapshot.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id })
+      })
+      dispatch({ type: Actiontypes.getproductdata, payload: data })
+      // getalldata()
+      //   .then((data) =>
+      //     dispatch({ type: Actiontypes.getproductdata, payload: data.data }),
+      //   )
+      //   .catch((error) => dispatch(errordata(error.message)))
 
       // fetch(base_url + 'product')
       //     .then(response => {
@@ -40,11 +49,26 @@ export const Adddata = (data) => (dispatch) => {
   try {
     dispatch(loaddata())
     setTimeout(function () {
-      Addalldata(data)
-        .then((data) =>
-          dispatch({ type: Actiontypes.Add_product, payload: data.data }),
+      const filename = Math.floor(Math.random()*100000);
+      const proRef = ref(storage, 'Products/' + filename)
+      uploadBytes(proRef, data.pname).then(async (snapshot) => {
+        getDownloadURL(snapshot.ref)
+        .then(
+          async (url) => {
+            const docRef = await addDoc(collection(db, 'Products'), 
+            {...data,pname: url,filename : filename})
+            dispatch({
+              type: Actiontypes.Add_product,
+              payload: { ...data, id: docRef.id, pname: url,filename:filename},
+            })
+          },
         )
-        .catch((error) => dispatch(errordata(error.message)))
+      })
+      // Addalldata(data)
+      //   .then((data) =>
+      //     dispatch({ type: Actiontypes.Add_product, payload: data.data }),
+      //   )
+      //   .catch((error) => dispatch(errordata(error.message)))
       // fetch(base_url + 'product')
       //     .then(response => {
       //         if (response.ok) {

@@ -101,9 +101,9 @@ export const Adddata = (data) => (dispatch) => {
 
 export const Editdata = (data) => async (dispatch) => {
   try {
-    const medRef = db.collection('Medicines').doc(data.id)
+    const proRef = db.collection('Products').doc(data.id)
     if(typeof data.pname === 'string'){
-      const res = await medRef.update({
+      const res = await proRef.update({
         name: data.name,
         quantity: data.quantity,
         price: data.price,
@@ -114,8 +114,8 @@ export const Editdata = (data) => async (dispatch) => {
       dispatch({ type: Actiontypes.Edit_product, payload: data })
     } else{
       const filename1 = Math.floor(Math.random()*100000);
-      const oldimgref = ref(storage, 'Medicines/' + data.filename)
-      const newimgref = ref(storage, 'Medicines/' + filename1)
+      const oldimgref = ref(storage, 'Products/' + data.filename)
+      const newimgref = ref(storage, 'Products/' + filename1)
       deleteObject(oldimgref)
     .then(async() => {
       uploadBytes(newimgref,data.pname).then(async (snapshot) => {

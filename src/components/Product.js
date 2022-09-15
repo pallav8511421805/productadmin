@@ -47,13 +47,13 @@ function Product(props) {
     }
   }
 
-  const handleddelete = (params) => {
+  const handleddelete = () => {
     // let local_data = JSON.parse(localStorage.getItem("Product"))
 
     // const filterdata = local_data.filter((l) => l.id !== data1);
 
     // localStorage.setItem("Product", JSON.stringify(filterdata));
-
+    
     Dispatch(Deletedata(data1))
 
     loadpdata();

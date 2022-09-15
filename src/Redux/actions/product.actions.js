@@ -177,7 +177,8 @@ export const Editdata = (data) => async (dispatch) => {
 export const Deletedata = (data) => (dispatch) => {
   try {
   const proRef = ref(storage, data.filename);
-deleteObject(proRef).then(async() => {
+deleteObject(proRef)
+.then(async() => {
   await deleteDoc(doc(db, 'Products', data.id))
   dispatch({ type: Actiontypes.Delete_product, payload: data.id })
 }).catch((error) => {

@@ -100,14 +100,16 @@ export const Adddata = (data) => (dispatch) => {
 }
 
 export const Editdata = (data) => async (dispatch) => {
+  console.log(data)
   try {
     const proRef = db.collection('Products').doc(data.id)
     if(typeof data.pname === 'string'){
       const res = await proRef.update({
-        name: data.name,
-        quantity: data.quantity,
+        companyname: data.companyname,
+        address : data.address,
+        name : data.name,
         price: data.price,
-        expiry: data.expiry,
+        productid: data.productid,
         filename: data.filename,
         pname: data.pname,
       })

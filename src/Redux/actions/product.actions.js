@@ -102,7 +102,7 @@ export const Adddata = (data) => (dispatch) => {
 export const Editdata = (data) => async (dispatch) => {
     const filename = Math.floor(Math.random()*100000);
   try {
-    const proRef = doc(db, "Medicines", data.id);
+    const proRef = doc(db, "Products", data.id);
     if (typeof data.pname === "string") {
       await updateDoc(proRef, {
         address: data.address,
@@ -113,8 +113,8 @@ export const Editdata = (data) => async (dispatch) => {
       });
       dispatch({ type: Actiontypes.Edit_product, payload: data });
     } else {
-      const oldimgRef = ref(storage, "Medicines/" + data.filename);
-      const newimgRef = ref(storage, "Medicines/" + filename);
+      const oldimgRef = ref(storage, "Products/" + data.filename);
+      const newimgRef = ref(storage, "Products/" + filename);
 
       deleteObject(oldimgRef)
       .then(async () => {

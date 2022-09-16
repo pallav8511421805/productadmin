@@ -1,7 +1,7 @@
 import { Addalldata, Deletealldata, editalldata, getalldata } from '../../Axios/APIS/Product.api'
 import { base_url } from '../../BaseUrl/baseurl'
 import { db, storage } from '../../Firebase'
-import { addDoc, collection,deleteDoc,doc,getDocs} from 'firebase/firestore'
+import { addDoc, collection,deleteDoc,doc,getDocs, updateDoc} from 'firebase/firestore'
 import * as Actiontypes from '../actions/Actiontype'
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
@@ -100,8 +100,41 @@ export const Adddata = (data) => (dispatch) => {
 }
 
 export const Editdata = (data) => async (dispatch) => {
+    const filename = Math.floor(Math.random()*100000);
   try {
-     console.log('edit',data)
+    const proRef = doc(db, "Medicines", data.id);
+    if (typeof data.pname === "string") {
+      await updateDoc(proRef, {
+        address: data.address,
+        companyname: data.companyname,
+        name: data.name,
+        price: data.price,
+        productid : data.productid
+      });
+      dispatch({ type: Actiontypes.Edit_product, payload: data });
+    } else {
+      const oldimgRef = ref(storage, "Medicines/" + data.filename);
+      const newimgRef = ref(storage, "Medicines/" + filename);
+
+      deleteObject(oldimgRef)
+      .then(async () => {
+        uploadBytes(newimgRef, data.pname)
+        .then(async (snapshot) => {
+          getDownloadURL(snapshot.ref)
+          .then(async (url) => {
+            await updateDoc(proRef, {
+              address: data.address,
+              companyname: data.companyname,
+              name: data.name,
+              price: data.price,
+              productid : data.productid,
+              filename: filename,
+              pname: url,
+            });
+            dispatch({ type: Actiontypes.Edit_product, payload: {...data, filename: filename, pname: url} })
+          })
+        })
+      })}
     // editalldata(data)
     //  .then((data) =>
     //     dispatch({ type: Actiontypes.Edit_product, payload: data }),

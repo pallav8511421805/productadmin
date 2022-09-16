@@ -101,40 +101,7 @@ export const Adddata = (data) => (dispatch) => {
 
 export const Editdata = (data) => async (dispatch) => {
   try {
-    const proRef = db.collection('Products').doc(data.id)
-    if(typeof data.pname === 'string'){
-      const res = await proRef.update({
-        companyname: data.companyname,
-        address : data.address,
-        name : data.name,
-        price: data.price,
-        productid: data.productid,
-        filename: data.filename,
-        pname: data.pname,
-      })
-      dispatch({ type: Actiontypes.Edit_product, payload: data })
-    } else{
-      const filename1 = Math.floor(Math.random()*100000);
-      const oldimgref = ref(storage, 'Products/' + data.filename)
-      const newimgref = ref(storage, 'Products/' + filename1)
-      deleteObject(oldimgref)
-    .then(async() => {
-      uploadBytes(newimgref,data.pname).then(async (snapshot) => {
-        getDownloadURL(snapshot.ref)
-        .then(
-          async (url) => {
-            dispatch({
-              type: Actiontypes.Edit_product,
-              payload: { ...data,pname: url,filename:filename1}
-            })
-          },
-        )
-      })
-    })
-    .catch((error) => {
-      dispatch(errordata(error.message))
-    });
-    }
+     console.log('edit',data)
     // editalldata(data)
     //  .then((data) =>
     //     dispatch({ type: Actiontypes.Edit_product, payload: data }),
@@ -176,7 +143,7 @@ export const Editdata = (data) => async (dispatch) => {
 
 export const Deletedata = (data) => (dispatch) => {
   try {
-  const proRef = ref(storage, data.filename);
+  const proRef = ref(storage, 'Products/' + data.filename);
 deleteObject(proRef)
 .then(async() => {
   await deleteDoc(doc(db, 'Products', data.id))

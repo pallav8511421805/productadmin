@@ -40,7 +40,7 @@ export const productreducer = (state = intval, action) => {
                 return {
                     ...state,
                     isload: false,
-                    productdata: state.productdata.filter((d) => d.id !== action.payload.id),
+                    productdata: state.productdata.filter((d) => d.id !== action.payload),
                     error: ''
                 }
 
